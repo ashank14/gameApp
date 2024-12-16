@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              Int        @id @default(autoincrement())  
+  username        String     @unique
+  email           String     @unique                      
+  password        String     
+  sentMessages    Message[]  @relation("from")     
+  receivedMessages Message[] @relation("to") 
+  gamesAsPlayer1  Gamestate[] @relation("p1")         
+  gamesAsPlayer2  Gamestate[] @relation("p2")  
+  gamesAsTurn     Gamestate[] @relation("turn")
+  gamesWon        Gamestate[] @relation("winner")
+}
+model Gamestate{
+  id         Int  @id @default(autoincrement())
+  player1    Int
+  player2    Int
+  turn       Int
+  state      String   
+  winner     Int?
+
+  p1         User   @relation("p1",fields: [player1],references:[id])
+  p2         User   @relation("p2",fields: [player2],references:[id])
+  turnId     User   @relation("turn",fields: [turn],references:[id])
+  winnerId   User?  @relation("winner",fields: [winner],references:[id])
+}
+
+model Message{
+  id        Int   @id @default(autoincrement())    
+  fromId    Int
+  toId      Int
+  message   String
+  from      User   @relation("from",fields: [fromId], references:[id])
+  to        User   @relation("to",fields: [toId], references:[id])
+}
+
