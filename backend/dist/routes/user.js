@@ -82,8 +82,15 @@ userRouter.post('/signin', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const token = jsonwebtoken_1.default.sign(getUser.username, process.env.JWT_SECRET);
     res.json({
         msg: "signed in!",
-        token: token
+        token: token,
+        username: getUser.username
     });
     return;
+}));
+//fetch state
+userRouter.get('/fetchState', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+}));
+//fetch messages
+userRouter.get('/fetchMessages', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 exports.default = userRouter;

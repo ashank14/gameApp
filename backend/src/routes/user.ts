@@ -90,10 +90,23 @@ userRouter.post('/signin',async (req:Request,res:Response)=>{
 
     res.json({
         msg:"signed in!",
-        token:token
+        token:token,
+        username:getUser.username
     })
 
     return;
+
+});
+
+//fetch state
+
+userRouter.get('/fetchState',async(req,res)=>{
+
+});
+
+//fetch messages
+
+userRouter.get('/fetchMessages',async(req,res)=>{
 
 });
 
