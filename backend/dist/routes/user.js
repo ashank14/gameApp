@@ -58,7 +58,8 @@ userRouter.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const token = jsonwebtoken_1.default.sign(newUser.username, process.env.JWT_SECRET);
     res.json({
         msg: "signed up!",
-        token: token
+        token: token,
+        username: newUser.username
     });
     return;
 }));

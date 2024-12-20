@@ -69,12 +69,12 @@ wss.on('connection', (ws) => {
                     return;
                 }
                 if (rooms[roomid]) {
-                    ws.send("Room already exists");
+                    console.log("room exists!");
                     return;
                 }
                 rooms[roomid] = [];
                 rooms[roomid].push(ws);
-                ws.send("room created");
+                ws.send(JSON.stringify({ res: "connected" }));
                 return;
             }
             //join room
@@ -107,10 +107,9 @@ wss.on('connection', (ws) => {
                 }
                 rooms[roomid].forEach((client) => {
                     if (client != ws) {
-                        client.send(data.message);
+                        client.send(JSON.stringify({ res: "chat", message: data.message }));
                     }
                 });
-                ws.send("message sent");
                 return;
             }
             //game state

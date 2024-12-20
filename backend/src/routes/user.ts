@@ -56,7 +56,8 @@ userRouter.post('/signup',async (req:Request,res:Response) =>{
 
     res.json({
         msg:"signed up!",
-        token:token
+        token:token,
+        username:newUser.username
     })
 
     return;
