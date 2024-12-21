@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
   
-function Chat({ socket }: { socket: WebSocket|null }) {
+function Chat({ socket,loading }: { socket: WebSocket|null, loading:boolean }) {
     const [messages, setMessages] = useState<String[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [input,setInput]=useState<String>("");
 
     useEffect(() => {
         console.log("helloo");
+        console.log(socket);
         if(!socket){
             return;
         }
-        console.log("hell");
-        setLoading(false);
         console.log(loading);
 
         const handleChatMessage = (event:any) => {
@@ -25,7 +21,6 @@ function Chat({ socket }: { socket: WebSocket|null }) {
         };
     
         socket.addEventListener("message", handleChatMessage);
-        
         return () => {
           socket.removeEventListener("message", handleChatMessage);
         };

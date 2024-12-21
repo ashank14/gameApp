@@ -5,18 +5,16 @@ import { useParams } from "react-router-dom";
 
 function Game(){
 
-    
-    const [loading,setLoading]=useState<boolean>(true);
-    const [socket, setSocket] = useState<WebSocket | null>(null);    
+    const [socket, setSocket] = useState<WebSocket | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);  
     const roomevent = useParams();
-
-
 
     useEffect(() => {
         console.log("chat rendered");
 
         const socket = new WebSocket("ws://localhost:3000");
         setSocket(socket);
+        console.log(socket);
         socket.addEventListener("open", (event) => {
             socket.send(
                 JSON.stringify({
@@ -24,15 +22,11 @@ function Game(){
                     roomid: localStorage.getItem("roomid"),
                 })
             );
+            setLoading(false);
         });
 
         socket.addEventListener("message", (event) => {
             const data = JSON.parse(event.data);
-
-            if (data.res === "connected") {
-                setLoading(false);
-            }
-
             console.log("Message from server:", data.res);
         });
 
@@ -49,7 +43,7 @@ function Game(){
                     <Board/>
                 </div>
                 <div>
-                    <Chat socket={socket}/>
+                    <Chat socket={socket} loading={loading}/>
                 </div>
             </div>
         </>
