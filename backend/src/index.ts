@@ -26,6 +26,8 @@ const wss=new WebSocketServer({server});
 
 const clients:WebSocket[]=[]; 
 
+console.log("hello");
+
 //clientA will connect to the ws along with a roomid
 //server will store clientA ws along w this string in a map
 //clientB will connect using this room id, server will store clientB ws along w this roomid
