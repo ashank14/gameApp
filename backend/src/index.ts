@@ -55,12 +55,9 @@ const RoomEventSchema = BaseMessageSchema.extend({
 //Schema for game state event
 const GameStateSchema=BaseMessageSchema.extend({
   event:z.literal("game-state"),
-  message: z
-    .string()
-    .regex(/^[XO ]*$/, "Message can only contain 'X', 'O', or blank spaces")
-    .refine((msg) => msg.length === 9, "Message must be exactly 9 characters long"),
+  message:z.array(z.string()).length(9),
   currentTurn: z.enum(['X', 'O']),
-  status: z.enum(['in-progress', 'won', 'draw'])
+  status: z.enum(['in-progress', 'X-won','O-won', 'draw'])
 });
 
 // Infer TypeScript types from schemas
@@ -148,32 +145,33 @@ wss.on('connection',(ws)=>{
                 client.send(JSON.stringify({res:"chat",message:data.message}));
               }
             });
-            
-
-
             return;
           }
           
           //game state
           if(event=="game-state"){
+            console.log(data);
             const stateValidate=GameStateSchema.safeParse(data);
             if(!stateValidate.success){
               ws.send("Invalid Inputs");
+              console.log("hello in");
               return;
             }
 
             rooms[roomid].forEach((clients)=>{
               if(clients!=ws){
-                ws.send(JSON.stringify(
+                clients.send(JSON.stringify(
                   {
-                    message:data.string,
+                    message:data.message,
                     status:data.status,
-                    turn:data.currentTurn
+                    currentTurn:data.currentTurn,
+                    res:"game-state"
                   }
                 ));
+                console.log("received and sent");
               }
             });
-
+            console.log("received state");
             return;
           }
 

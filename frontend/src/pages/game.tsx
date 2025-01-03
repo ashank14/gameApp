@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 function Game(){
 
     const [socket, setSocket] = useState<WebSocket | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);  
+    const [loading, setLoading] = useState<boolean>(true);  
     const roomevent = useParams();
 
     useEffect(() => {
